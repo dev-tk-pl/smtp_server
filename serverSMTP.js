@@ -75,6 +75,7 @@
 
 const express = require("express");
 const cors = require('cors');
+require('dotenv').config();
 
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 const app = express();
