@@ -3,13 +3,13 @@ const cors = require('cors');
 require('dotenv').config();
 
 const SibApiV3Sdk = require('sib-api-v3-sdk');
+const http = require('http');
 const app = express();
 const port = process.env.PORT || 3000;
-const allowedOrigins = ['http://89.64.122.159'];
+// const allowedOrigins = ['http://89.64.122.159'];
 
 app.use(function (req, res, next) {
     // const origin = req.headers.origin;
-
     // if (allowedOrigins.includes(origin)) {
     // 	res.setHeader('Access-Control-Allow-Origin', origin);
     // }
@@ -25,10 +25,15 @@ const defaultClient = SibApiV3Sdk.ApiClient.instance;
 apiKey = defaultClient.authentications['api-key'];
 apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
+
+const server = http.createServer(app);
+server.maxConnections = 100; // Ustawienie maksymalnej liczby równoczesnych połączeń
+
+
 app.post('/send-email', (req, res) => {
     const token = req.headers['authorization'];
     if (token === process.env.SECRET_KEY) {
-        console.log(req.headers)
+        // console.log(req.headers)
         const dane = req.body;
         console.log(dane);
         sendEmail(dane)
